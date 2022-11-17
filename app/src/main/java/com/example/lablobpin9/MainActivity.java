@@ -12,13 +12,14 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity implements OnClickListener {
 
-    EditText etText;
+    EditText etLogin, etPassword;
     Button btnSave, btnLoad;
 
-    SharedPreferences sPref;
+    SharedPreferences Log;
+    SharedPreferences Pas;
 
-    final String SAVED_TEXT = "saved_text";
-
+    final String SAVED_LOG = "saved_LOG";
+    final String SAVED_PAS = "saved_PAS";
 
     /** Called when the activity is first created. */
     @Override
@@ -26,25 +27,26 @@ public class MainActivity extends Activity implements OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        etText = (EditText) findViewById(R.id.etText);
+        etLogin = (EditText) findViewById(R.id.etLogin);
+        etPassword = (EditText) findViewById(R.id.etPassword);
 
-        btnSave = (Button) findViewById(R.id.btnSave);
+        btnSave = (Button) findViewById(R.id.btnReg);
         btnSave.setOnClickListener(this);
-
-        btnLoad = (Button) findViewById(R.id.btnLoad);
+        btnLoad = (Button) findViewById(R.id.btnJoin);
         btnLoad.setOnClickListener(this);
 
-        loadText();
+
+
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btnSave:
+            case R.id.btnReg:
                 saveText();
                 break;
-            case R.id.btnLoad:
-                loadText();
+            case R.id.btnJoin:
+                checkText();
                 break;
             default:
                 break;
@@ -52,18 +54,27 @@ public class MainActivity extends Activity implements OnClickListener {
     }
 
     void saveText() {
-        sPref = getPreferences(MODE_PRIVATE);
-        Editor ed = sPref.edit();
-        ed.putString(SAVED_TEXT, etText.getText().toString());
-        ed.commit();
-        Toast.makeText(this, "Text saved", Toast.LENGTH_SHORT).show();
+        Log = getPreferences(MODE_PRIVATE);
+        Editor L = Log.edit();
+        L.putString(SAVED_LOG, etLogin.getText().toString());
+        L.commit();
+        Pas = getPreferences(MODE_PRIVATE);
+        Editor P = Pas.edit();
+        P.putString(SAVED_PAS, etPassword.getText().toString());
+        P.commit();
+        Toast.makeText(this, "User saved", Toast.LENGTH_SHORT).show();
     }
 
-    void loadText() {
-        sPref = getPreferences(MODE_PRIVATE);
-        String savedText = sPref.getString(SAVED_TEXT, "");
-        etText.setText(savedText);
-        Toast.makeText(this, "Text loaded", Toast.LENGTH_SHORT).show();
+    void checkText() {
+        Log = getPreferences(MODE_PRIVATE);
+        String Login = Log.getString(SAVED_LOG, "Login saved");
+        Pas = getPreferences(MODE_PRIVATE);
+        String Password = Pas.getString(SAVED_PAS, "Password saved");
+        if(Login.equals(etLogin.getText().toString())) {
+            if (Password.equals(etPassword.getText().toString())) {
+                Toast.makeText(this, "Join", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override
